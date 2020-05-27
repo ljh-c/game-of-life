@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
 const Board = () => {
   const classes = useStyles();
 
-  const CELL_SIZE = 20;
+  const CELL_SIZE = 15;
   const ROWS = 25;
-  const COLS = 30;
+  const COLS = 25;
 
   const [matrix, setMatrix] = useState(
     new Array(COLS)
@@ -35,16 +35,53 @@ const Board = () => {
   //   )
 
   const calcNext = (grid) => {
-    const nextMatrix = grid.map((col) => col.map((cell) => (cell ? 0 : 1)));
+    const nextMatrix = grid.map((col, x) =>
+      col.map((cell, y) => {
+        // Count neighbors
+        let count = 0;
+
+        for (let nx = x - 1; nx <= x + 1; ++nx) {
+          for (let ny = y - 1; ny <= y + 1; ++ny) {
+            let neighborX = nx;
+            let neighborY = ny;
+
+            if (neighborX === x && neighborY === y) continue;
+
+            if (neighborX < 0) neighborX = grid.length - 1;
+            if (neighborX === grid.length) neighborX = 0;
+
+            if (neighborY < 0) neighborY = grid[x].length - 1;
+            if (neighborY === grid[x].length) neighborY = 0;
+
+            count += grid[neighborX][neighborY];
+          }
+        }
+
+        // Apply rules
+        if (cell) {
+          if (count < 2 || count > 3) return 0;
+        } else {
+          if (count === 3) return 1;
+        }
+
+        return cell;
+      })
+    );
 
     return nextMatrix;
   };
 
-  const [buffer, setBuffer] = useState(calcNext(matrix));
+  const [buffer, setBuffer] = useState(() => calcNext(matrix));
 
   const canvasRef = useRef(null);
 
-  const drawBoard = useCallback((ctx) => {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    // Draw board
+    ctx.clearRect(0, 0, CELL_SIZE * COLS, CELL_SIZE * ROWS);
+
     matrix.forEach((col, x) => {
       col.forEach((cell, y) => {
         ctx.beginPath();
@@ -59,17 +96,9 @@ const Board = () => {
     });
   }, [matrix]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-    ctx.clearRect(0, 0, CELL_SIZE * COLS, CELL_SIZE * ROWS)
-    drawBoard(ctx);
-  }, [drawBoard]);
-
   const advanceGen = () => {
     setMatrix(buffer);
-    setBuffer(calcNext(buffer));
+    setBuffer(() => calcNext(buffer));
   };
 
   return (
