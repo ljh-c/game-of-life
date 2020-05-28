@@ -1,6 +1,8 @@
 import React, { useReducer, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
+import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import StopOutlinedIcon from '@material-ui/icons/StopOutlined';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
 import { matrixReducer } from '../utils/reducer';
 import { drawBoard } from '../utils/helpers';
@@ -28,6 +30,7 @@ const Board = () => {
       .map(() =>
         new Array(ROWS).fill(0).map(() => Math.floor(Math.random() * 2))
       ),
+    generation: 0,
   };
 
   const [state, dispatch] = useReducer(matrixReducer, initialState);
@@ -40,13 +43,17 @@ const Board = () => {
     drawBoard(canvas, state.buffer, CELL_SIZE);
   }, [state.buffer]);
 
-  const [step] = useAniFrame(() => {
-    dispatch({ type: 'advance' })
+  const [step, start, stop] = useAniFrame(() => {
+    dispatch({ type: 'advance' });
   });
 
   return (
     <div className={classes.board}>
       <Container maxWidth="md">
+        <b>Generation:</b> {state.generation}
+        <br />
+        <PlayArrowOutlinedIcon onClick={start} />
+        <StopOutlinedIcon onClick={stop} />
         <NavigateNextOutlinedIcon onClick={step} />
         <br />
         <canvas

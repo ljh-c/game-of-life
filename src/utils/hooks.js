@@ -9,9 +9,31 @@ export const useAniFrame = (aniCallback) => {
     aniCallback();
   };
 
+  // Callback function of requestAnimationFrame is automatically passed a timestamp
+  // indicating the time requestAnimationFrame() was called
+  const animateRecursively = (timestamp) => {
+    const interval = 250; // ms
+
+    if (timestamp - startTimeRef.current >= interval) {
+      aniCallback();
+
+      startTimeRef.current = timestamp;
+    }
+
+    requestRef.current = requestAnimationFrame(animateRecursively);
+  };
+
   const step = () => {
     requestRef.current = requestAnimationFrame(animateOnce);
   };
 
-  return [step];
+  const start = () => {
+    requestRef.current = requestAnimationFrame(animateRecursively);
+  };
+
+  const stop = () => {
+    cancelAnimationFrame(requestRef.current);
+  };
+
+  return [step, start, stop];
 };
