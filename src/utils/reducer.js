@@ -1,7 +1,7 @@
 import { calcNext } from './helpers';
 
-const ROWS = 30;
-const COLS = 25;
+const ROWS = 25;
+const COLS = 40;
 
 export const matrixReducer = (state, action) => {
   switch (action.type) {

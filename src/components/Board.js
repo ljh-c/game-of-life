@@ -19,8 +19,8 @@ const Board = () => {
   const classes = useStyles();
 
   const CELL_SIZE = 20;
-  const ROWS = 30;
-  const COLS = 25;
+  const ROWS = 25;
+  const COLS = 40;
   const WIDTH = CELL_SIZE * COLS;
   const HEIGHT = CELL_SIZE * ROWS;
 
@@ -70,7 +70,7 @@ const Board = () => {
     const cellX = Math.floor(x / CELL_SIZE);
     const cellY = Math.floor(y / CELL_SIZE);
 
-    if (cellX < ROWS && cellY < COLS) {
+    if (!state.running && cellX < COLS && cellY < ROWS) {
       dispatch({ type: 'toggle', payload: { cellX, cellY } });
     }
   };
