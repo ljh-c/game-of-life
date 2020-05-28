@@ -87,6 +87,7 @@ const Board = () => {
         )}
         <NavigateNextOutlinedIcon onClick={step} />
         <ClearAllOutlinedIcon onClick={() => dispatch({ type: 'clear' })} />
+        <button onClick={() => dispatch({ type: 'random' })}>Random</button>
         <br />
         <canvas
           ref={canvasRef}

@@ -45,6 +45,19 @@ export const matrixReducer = (state, action) => {
         matrix: newMatrix,
         buffer: newBuffer,
       };
+    case 'random':
+      const seed = new Array(COLS)
+        .fill(0)
+        .map(() =>
+          new Array(ROWS).fill(0).map(() => Math.floor(Math.random() * 2))
+        );
+
+      return {
+        ...state,
+        matrix: seed,
+        buffer: calcNext(seed),
+        generation: 0,
+      };
 
     default:
       return state;
