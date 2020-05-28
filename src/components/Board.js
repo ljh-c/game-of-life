@@ -4,6 +4,7 @@ import { Container } from '@material-ui/core';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
 import { matrixReducer } from '../utils/reducer';
 import { drawBoard } from '../utils/helpers';
+import { useAniFrame } from '../utils/hooks';
 
 const useStyles = makeStyles((theme) => ({
   board: {
@@ -39,10 +40,14 @@ const Board = () => {
     drawBoard(canvas, state.buffer, CELL_SIZE);
   }, [state.buffer]);
 
+  const [step] = useAniFrame(() => {
+    dispatch({ type: 'advance' })
+  });
+
   return (
     <div className={classes.board}>
       <Container maxWidth="md">
-        <NavigateNextOutlinedIcon />
+        <NavigateNextOutlinedIcon onClick={step} />
         <br />
         <canvas
           ref={canvasRef}
