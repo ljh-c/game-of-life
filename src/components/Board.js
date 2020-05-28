@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useReducer, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
+import { matrixReducer } from '../utils/reducer';
 import { drawBoard } from '../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,21 +20,24 @@ const Board = () => {
   const WIDTH = CELL_SIZE * COLS;
   const HEIGHT = CELL_SIZE * ROWS;
 
-  const [matrix] = useState(
-    new Array(COLS)
+  const initialState = {
+    matrix: null,
+    buffer: new Array(COLS)
       .fill(0)
       .map(() =>
         new Array(ROWS).fill(0).map(() => Math.floor(Math.random() * 2))
-      )
-  );
+      ),
+  };
+
+  const [state, dispatch] = useReducer(matrixReducer, initialState);
 
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    drawBoard(canvas, matrix, CELL_SIZE);
-  }, [matrix]);
+    drawBoard(canvas, state.buffer, CELL_SIZE);
+  }, [state.buffer]);
 
   return (
     <div className={classes.board}>
