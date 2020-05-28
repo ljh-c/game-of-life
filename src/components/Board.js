@@ -5,7 +5,7 @@ import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import StopOutlinedIcon from '@material-ui/icons/StopOutlined';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
 import { matrixReducer } from '../utils/reducer';
-import { drawBoard } from '../utils/helpers';
+import { calcNext, drawBoard } from '../utils/helpers';
 import { useAniFrame } from '../utils/hooks';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,13 +23,15 @@ const Board = () => {
   const WIDTH = CELL_SIZE * COLS;
   const HEIGHT = CELL_SIZE * ROWS;
 
+  const seed = new Array(COLS)
+    .fill(0)
+    .map(() =>
+      new Array(ROWS).fill(0).map(() => Math.floor(Math.random() * 2))
+    );
+
   const initialState = {
-    matrix: null,
-    buffer: new Array(COLS)
-      .fill(0)
-      .map(() =>
-        new Array(ROWS).fill(0).map(() => Math.floor(Math.random() * 2))
-      ),
+    matrix: seed,
+    buffer: calcNext(seed),
     generation: 0,
   };
 
@@ -40,8 +42,8 @@ const Board = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    drawBoard(canvas, state.buffer, CELL_SIZE);
-  }, [state.buffer]);
+    drawBoard(canvas, state.matrix, CELL_SIZE);
+  }, [state.matrix]);
 
   const [step, start, stop] = useAniFrame(() => {
     dispatch({ type: 'advance' });
