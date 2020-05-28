@@ -4,6 +4,7 @@ import { Container } from '@material-ui/core';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import StopOutlinedIcon from '@material-ui/icons/StopOutlined';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
+import ClearAllOutlinedIcon from '@material-ui/icons/ClearAllOutlined';
 import { matrixReducer } from '../utils/reducer';
 import { calcNext, drawBoard } from '../utils/helpers';
 import { useAniFrame } from '../utils/hooks';
@@ -18,7 +19,7 @@ const Board = () => {
   const classes = useStyles();
 
   const CELL_SIZE = 20;
-  const ROWS = 25;
+  const ROWS = 30;
   const COLS = 25;
   const WIDTH = CELL_SIZE * COLS;
   const HEIGHT = CELL_SIZE * ROWS;
@@ -33,6 +34,7 @@ const Board = () => {
     matrix: seed,
     buffer: calcNext(seed),
     generation: 0,
+    running: false,
   };
 
   const [state, dispatch] = useReducer(matrixReducer, initialState);
@@ -49,20 +51,49 @@ const Board = () => {
     dispatch({ type: 'advance' });
   });
 
+  const startGame = () => {
+    start();
+    dispatch({ type: 'start' });
+  };
+
+  const stopGame = () => {
+    stop();
+    dispatch({ type: 'pause' });
+  };
+
+  const getPosition = (e) => {
+    const rect = e.target.getBoundingClientRect();
+
+    const x = e.clientX - rect.left + 1;
+    const y = e.clientY - rect.top + 1;
+
+    const cellX = Math.floor(x / CELL_SIZE);
+    const cellY = Math.floor(y / CELL_SIZE);
+
+    if (cellX < ROWS && cellY < COLS) {
+      dispatch({ type: 'toggle', payload: { cellX, cellY } });
+    }
+  };
+
   return (
     <div className={classes.board}>
       <Container maxWidth="md">
         <b>Generation:</b> {state.generation}
         <br />
-        <PlayArrowOutlinedIcon onClick={start} />
-        <StopOutlinedIcon onClick={stop} />
+        {state.running ? (
+          <StopOutlinedIcon onClick={stopGame} />
+        ) : (
+          <PlayArrowOutlinedIcon onClick={startGame} />
+        )}
         <NavigateNextOutlinedIcon onClick={step} />
+        <ClearAllOutlinedIcon onClick={() => dispatch({ type: 'clear' })} />
         <br />
         <canvas
           ref={canvasRef}
           width={WIDTH}
           height={HEIGHT}
           style={{ border: '1px solid darkcyan' }}
+          onClick={getPosition}
         />
       </Container>
     </div>

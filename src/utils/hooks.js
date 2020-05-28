@@ -12,7 +12,7 @@ export const useAniFrame = (aniCallback) => {
   // Callback function of requestAnimationFrame is automatically passed a timestamp
   // indicating the time requestAnimationFrame() was called
   const animateRecursively = (timestamp) => {
-    const interval = 250; // ms
+    const interval = 200; // ms
 
     if (timestamp - startTimeRef.current >= interval) {
       aniCallback();
