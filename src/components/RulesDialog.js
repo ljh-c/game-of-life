@@ -14,7 +14,7 @@ export default function RulesDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
+      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
         <HelpOutlineOutlinedIcon />
       </Button>
       <Dialog

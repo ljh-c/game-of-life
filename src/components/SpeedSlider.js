@@ -1,14 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import SpeedIcon from '@material-ui/icons/Speed';
 import { Slider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 300,
     margin: '0 auto',
-  },
-  margin: {
-    height: theme.spacing(3),
+    display: 'flex',
+    padding: theme.spacing(2, 0),
   },
 }));
 
@@ -40,10 +40,11 @@ const SpeedSlider = ({ setPeriod }) => {
 
   return (
     <div className={classes.root}>
+      <SpeedIcon style={{ marginRight: '10' }} />
       <Slider
         defaultValue={500}
         aria-labelledby="speed-slider"
-        step={null}
+        step={20}
         valueLabelDisplay="auto"
         marks={marks}
         min={20}

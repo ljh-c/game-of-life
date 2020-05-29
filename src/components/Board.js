@@ -1,10 +1,9 @@
 import React, { useReducer, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container } from '@material-ui/core';
+import { Container, Typography, Button, Grid } from '@material-ui/core';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import StopOutlinedIcon from '@material-ui/icons/StopOutlined';
 import NavigateNextOutlinedIcon from '@material-ui/icons/NavigateNextOutlined';
-import ClearAllOutlinedIcon from '@material-ui/icons/ClearAllOutlined';
 import { matrixReducer } from '../utils/reducer';
 import { calcNext, drawBoard } from '../utils/helpers';
 import { useAniFrame } from '../utils/hooks';
@@ -14,6 +13,9 @@ import RulesDialog from './RulesDialog';
 const useStyles = makeStyles((theme) => ({
   board: {
     padding: theme.spacing(5, 0, 5),
+  },
+  controlBar: {
+    margin: theme.spacing(3, 0, 3),
   },
 }));
 
@@ -80,25 +82,61 @@ const Board = () => {
   return (
     <div className={classes.board}>
       <Container maxWidth="md">
-        <b>Generation:</b> {state.generation}
-        <br />
-        {state.running ? (
-          <StopOutlinedIcon onClick={stopGame} />
-        ) : (
-          <PlayArrowOutlinedIcon onClick={startGame} />
-        )}
-        <NavigateNextOutlinedIcon onClick={step} />
-        <ClearAllOutlinedIcon onClick={() => dispatch({ type: 'clear' })} />
-        <button onClick={() => dispatch({ type: 'random' })}>Random</button>
-        <RulesDialog />
-        <br />
-        <SpeedSlider setPeriod={setPeriod} />
-        <br />
+        <div className={classes.controlBar}>
+          <Grid container spacing={2} justify="center">
+            <Grid item>
+              {state.running ? (
+                <Button variant="outlined" color="primary" onClick={stopGame}>
+                  <StopOutlinedIcon />
+                </Button>
+              ) : (
+                <Button variant="outlined" color="primary" onClick={startGame}>
+                  <PlayArrowOutlinedIcon />
+                </Button>
+              )}
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" color="primary" onClick={step}>
+                <NavigateNextOutlinedIcon />
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => dispatch({ type: 'clear' })}
+              >
+                Clear
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => dispatch({ type: 'random' })}
+              >
+                Random
+              </Button>
+            </Grid>
+            <Grid item>
+              <RulesDialog />
+            </Grid>
+          </Grid>
+          <SpeedSlider setPeriod={setPeriod} />
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph
+          >
+            <b>Generation:</b> {state.generation}
+          </Typography>
+        </div>
         <canvas
           ref={canvasRef}
           width={WIDTH}
           height={HEIGHT}
-          style={{ border: '1px solid darkcyan' }}
+          style={{ border: '1px solid #AE126D' }}
           onClick={getPosition}
         />
       </Container>

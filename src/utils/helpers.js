@@ -44,7 +44,7 @@ export const drawBoard = (canvas, matrix, cellSize) => {
     col.forEach((cell, y) => {
       ctx.beginPath();
       ctx.rect(x * cellSize, y * cellSize, cellSize, cellSize);
-      ctx.strokeStyle = 'darkcyan';
+      ctx.strokeStyle = '#3392B1';
       ctx.fillStyle = 'deepskyblue';
 
       if (cell) ctx.fill();
