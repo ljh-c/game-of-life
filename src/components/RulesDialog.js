@@ -34,20 +34,20 @@ export default function RulesDialog() {
             to some fixed rules. The rules are:
             <ul>
               <li>
-                If a cell has fewer than two neighbors, it dies (modeling
+                If a live cell has fewer than two neighbors, it dies (modeling
                 underpopulation).
               </li>
               <li>
-                If a cell has two or three neighbors, it survives to the next
+                If a live cell has two or three neighbors, it survives to the next
                 generation.
               </li>
               <li>
-                If a cell has exactly three neighbors, it becomes a live cell
-                (modeling reproduction).
+                If a live cell has more than three neighbors, it dies (modeling
+                overpopulation).
               </li>
               <li>
-                If a cell has more than three neighbors, it dies (modeling
-                overpopulation).
+                If a dead cell has exactly three neighbors, it becomes a live cell
+                (modeling reproduction).
               </li>
             </ul>
             The game evolves by itself based only on its initial state. Despite
