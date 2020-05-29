@@ -28,6 +28,7 @@ export const matrixReducer = (state, action) => {
         matrix: new Array(COLS).fill(new Array(ROWS).fill(0)),
         buffer: new Array(COLS).fill(new Array(ROWS).fill(0)),
         generation: 0,
+        running: false,
       };
     case 'toggle':
       const newMatrix = state.matrix.map((row) => row.slice());

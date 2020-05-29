@@ -12,7 +12,7 @@ import RulesDialog from './RulesDialog';
 
 const useStyles = makeStyles((theme) => ({
   board: {
-    padding: theme.spacing(5, 0, 5),
+    padding: theme.spacing(4, 0, 5),
   },
   controlBar: {
     margin: theme.spacing(3, 0, 3),
@@ -65,6 +65,11 @@ const Board = () => {
     dispatch({ type: 'pause' });
   };
 
+  const clearGame = () => {
+    stop();
+    dispatch({ type: 'clear' });
+  };
+
   const getPosition = (e) => {
     const rect = e.target.getBoundingClientRect();
 
@@ -101,11 +106,7 @@ const Board = () => {
               </Button>
             </Grid>
             <Grid item>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => dispatch({ type: 'clear' })}
-              >
+              <Button variant="outlined" color="primary" onClick={clearGame}>
                 Clear
               </Button>
             </Grid>
@@ -122,7 +123,7 @@ const Board = () => {
               <RulesDialog />
             </Grid>
           </Grid>
-          <SpeedSlider setPeriod={setPeriod} />
+          <SpeedSlider setPeriod={setPeriod} running={state.running} />
           <Typography
             variant="h6"
             align="center"
@@ -136,7 +137,7 @@ const Board = () => {
           ref={canvasRef}
           width={WIDTH}
           height={HEIGHT}
-          style={{ border: '1px solid #AE126D' }}
+          style={{ border: '1px solid #3392B1' }}
           onClick={getPosition}
         />
       </Container>

@@ -31,7 +31,7 @@ const marks = [
   },
 ];
 
-const SpeedSlider = ({ setPeriod }) => {
+const SpeedSlider = ({ setPeriod, running }) => {
   const classes = useStyles();
 
   const handleChange = (e, newValue) => {
@@ -50,6 +50,7 @@ const SpeedSlider = ({ setPeriod }) => {
         min={20}
         max={1000}
         onChange={handleChange}
+        disabled={running}
       />
     </div>
   );
