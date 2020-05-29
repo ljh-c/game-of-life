@@ -8,6 +8,7 @@ import ClearAllOutlinedIcon from '@material-ui/icons/ClearAllOutlined';
 import { matrixReducer } from '../utils/reducer';
 import { calcNext, drawBoard } from '../utils/helpers';
 import { useAniFrame } from '../utils/hooks';
+import SpeedSlider from './SpeedSlider';
 
 const useStyles = makeStyles((theme) => ({
   board: {
@@ -47,9 +48,9 @@ const Board = () => {
     drawBoard(canvas, state.matrix, CELL_SIZE);
   }, [state.matrix]);
 
-  const [step, start, stop] = useAniFrame(() => {
+  const [step, start, stop, setPeriod] = useAniFrame(() => {
     dispatch({ type: 'advance' });
-  });
+  }, 500);
 
   const startGame = () => {
     start();
@@ -88,6 +89,8 @@ const Board = () => {
         <NavigateNextOutlinedIcon onClick={step} />
         <ClearAllOutlinedIcon onClick={() => dispatch({ type: 'clear' })} />
         <button onClick={() => dispatch({ type: 'random' })}>Random</button>
+        <br />
+        <SpeedSlider setPeriod={setPeriod} />
         <br />
         <canvas
           ref={canvasRef}

@@ -1,6 +1,8 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-export const useAniFrame = (aniCallback) => {
+export const useAniFrame = (aniCallback, interval) => {
+  const [period, setPeriod] = useState(interval);
+
   // Use useRef for mutable variables that we want to persist
   const requestRef = useRef();
   const startTimeRef = useRef(0);
@@ -12,9 +14,7 @@ export const useAniFrame = (aniCallback) => {
   // Callback function of requestAnimationFrame is automatically passed a timestamp
   // indicating the time requestAnimationFrame() was called
   const animateRecursively = (timestamp) => {
-    const interval = 200; // ms
-
-    if (timestamp - startTimeRef.current >= interval) {
+    if (timestamp - startTimeRef.current >= period) {
       aniCallback();
 
       startTimeRef.current = timestamp;
@@ -35,5 +35,5 @@ export const useAniFrame = (aniCallback) => {
     cancelAnimationFrame(requestRef.current);
   };
 
-  return [step, start, stop];
+  return [step, start, stop, setPeriod];
 };
