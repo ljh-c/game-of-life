@@ -9,6 +9,7 @@ import { matrixReducer } from '../utils/reducer';
 import { calcNext, drawBoard } from '../utils/helpers';
 import { useAniFrame } from '../utils/hooks';
 import SpeedSlider from './SpeedSlider';
+import RulesDialog from './RulesDialog';
 
 const useStyles = makeStyles((theme) => ({
   board: {
@@ -89,6 +90,7 @@ const Board = () => {
         <NavigateNextOutlinedIcon onClick={step} />
         <ClearAllOutlinedIcon onClick={() => dispatch({ type: 'clear' })} />
         <button onClick={() => dispatch({ type: 'random' })}>Random</button>
+        <RulesDialog />
         <br />
         <SpeedSlider setPeriod={setPeriod} />
         <br />

@@ -1,15 +1,20 @@
 import React from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './styles/theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Board from './components/Board';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className="App">
+        <main>
+          <Board />
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 
